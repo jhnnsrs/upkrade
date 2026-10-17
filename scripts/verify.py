@@ -23,7 +23,10 @@ server, cert_path, platform, runtime = sys.argv[1:5]
 channel = sys.argv[5] if len(sys.argv) > 5 else "production"
 current = sys.argv[6] if len(sys.argv) > 6 else None
 
+# Cloudflare blocks the default Python-urllib user agent.
+UA = {"User-Agent": "pokket-updates-verify/1"}
 headers = {
+    **UA,
     "expo-platform": platform,
     "expo-runtime-version": runtime,
     "expo-channel-name": channel,
@@ -58,7 +61,7 @@ manifest = parts["manifest"]
 print(f"manifest {manifest['id']} runtime={manifest['runtimeVersion']} "
       f"expoClient.version={manifest['extra']['expoClient'].get('version')}")
 for a in [manifest["launchAsset"], *manifest["assets"]]:
-    with urllib.request.urlopen(a["url"].replace("https://updates.arkitekt.live", server)) as r:
+    with urllib.request.urlopen(urllib.request.Request(a["url"].replace("https://updates.arkitekt.live", server), headers=UA)) as r:
         data = r.read()
         cache = r.headers["cache-control"]
     digest = base64.urlsafe_b64encode(hashlib.sha256(data).digest()).rstrip(b"=").decode()
