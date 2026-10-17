@@ -1,4 +1,4 @@
-"""A minimal Expo Updates server (protocol v1) for arkitektio/pokket.
+"""upkrade: a minimal Expo Updates server (protocol v1) for arkitektio/pokket.
 
 Everything lives in one RustFS bucket:
 
@@ -42,10 +42,10 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse, PlainTextResponse, Response, StreamingResponse
 from starlette.routing import Route
 
-log = logging.getLogger("updates")
-logging.basicConfig(level=os.environ.get("UPDATES_LOG_LEVEL", "INFO").upper())
+log = logging.getLogger("upkrade")
+logging.basicConfig(level=os.environ.get("UPKRADE_LOG_LEVEL", "INFO").upper())
 
-CONFIG = yaml.safe_load(Path(os.environ.get("UPDATES_CONFIG", "/workspace/config.yaml")).read_text())
+CONFIG = yaml.safe_load(Path(os.environ.get("UPKRADE_CONFIG", "/workspace/config.yaml")).read_text())
 PUBLIC_URL = CONFIG["public_url"].rstrip("/")
 DEFAULT_CHANNEL = CONFIG.get("default_channel", "production")
 BUCKET = CONFIG["s3"]["bucket"]

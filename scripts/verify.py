@@ -24,7 +24,7 @@ channel = sys.argv[5] if len(sys.argv) > 5 else "production"
 current = sys.argv[6] if len(sys.argv) > 6 else None
 
 # Cloudflare blocks the default Python-urllib user agent.
-UA = {"User-Agent": "pokket-updates-verify/1"}
+UA = {"User-Agent": "upkrade-verify/1"}
 headers = {
     **UA,
     "expo-platform": platform,

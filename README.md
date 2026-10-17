@@ -1,4 +1,4 @@
-# updates
+# upkrade
 
 A minimal [Expo Updates protocol v1](https://docs.expo.dev/technical-specs/expo-updates-1/)
 server for arkitektio/pokket's over-the-air updates. It replaces `eas update`; EAS Build and
@@ -32,22 +32,22 @@ and logs a warning. Watch for that warning on the first real check-ins.
 
 ## Operating it
 
-- Config: `../configs/updates.yaml`. It holds the publish token (GitHub secret `UPDATES_TOKEN`
+- Config: `../configs/upkrade.yaml`. It holds the publish token (GitHub secret `UPDATES_TOKEN`
   on arkitektio/pokket) and the RustFS keys of the `updates` user from `rustfs_init.yaml`. The
-  file is a single-file mount, so after editing it run `docker compose restart updates`.
-- Signing key: `../data/updates/keys/private-key.pem`, mounted read-only at `/keys`. **Back it
+  file is a single-file mount, so after editing it run `docker compose restart upkrade`.
+- Signing key: `../data/upkrade/keys/private-key.pem`, mounted read-only at `/keys`. **Back it
   up.** Its `certificate.pem` is compiled into the app, so losing or rotating the key means
   shipping a new binary. The certificate is valid until 2036.
-- After a code change: `docker compose build updates && docker compose up -d updates`.
+- After a code change: `docker compose build upkrade && docker compose up -d upkrade`.
 - Gateway site in `../configs/Caddyfile`:
   ```
   updates.arkitekt.live {
   	encode zstd gzip
-  	reverse_proxy updates:80
+  	reverse_proxy upkrade:80
   }
   ```
 - Check what a client would get (verifies the signature and re-hashes every asset):
-  `uv run --with cryptography python3 scripts/verify.py https://updates.arkitekt.live ../data/updates/keys/certificate.pem android <runtime> production`
+  `uv run --with cryptography python3 scripts/verify.py https://updates.arkitekt.live ../data/upkrade/keys/certificate.pem android <runtime> production`
 - Roll back:
   `curl -H "Authorization: Bearer $TOKEN" -F platform=android -F runtimeVersion=<rv> -F channel=production -F embedded=true https://updates.arkitekt.live/api/rollback`
 
@@ -56,7 +56,7 @@ and logs a warning. Watch for that warning on the first real check-ins.
 `updates.url` is compiled into each binary. Installs made before the switch keep polling
 u.expo.dev, keep their last EAS update, and move over when people install the next build.
 
-1. Copy `../data/updates/keys/certificate.pem` to `certs/certificate.pem` in pokket.
+1. Copy `../data/upkrade/keys/certificate.pem` to `certs/certificate.pem` in pokket.
 2. In `app.config.ts`, set:
    ```ts
    updates: {
