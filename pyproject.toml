@@ -1,0 +1,13 @@
+[project]
+name = "updates"
+version = "0.1.0"
+description = "Minimal Expo Updates (protocol v1) server for arkitektio/pokket"
+requires-python = ">=3.13"
+dependencies = [
+    "starlette>=0.47",
+    "uvicorn[standard]>=0.35",
+    "python-multipart>=0.0.20",
+    "boto3>=1.40",
+    "cryptography>=45",
+    "pyyaml>=6",
+]
